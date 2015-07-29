@@ -15,29 +15,26 @@ server.on('connection', function(connection){
         for (var i = 0; i < connections.length; i++){
             if(sender !== connections[i]){
               connections[i].write(message); 
-         }
-    };
+           }
+      };
          console.log("current connections: " + connections.length);
-}
+  }
     connections.push(connection);
     
     connection.on('end',function(){
         connections.splice(connections.indexOf(connection), 1); //this chops the array down so that the client who left is no longer inside the array.
         sendToAll(connection.name + " left the chat.\n");
        console.log("now there are: " + connections.length + " connections");
-
     });
     
     messages.forEach(function(element){ 
       connection.write(element);
-
     });  
 
     connection.on('data', function(incomingData){
       messages.push(incomingData);
       sendToAll(incomingData, connection);
 
-        
     })
 }); 
 
